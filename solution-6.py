@@ -88,15 +88,32 @@ class Solution:
     
     def pregunta_2(self, imagen, M):
         new_imagen = imagen.copy()                
+         # Kernel para el efecto de difuminado
         kernel = [[1/(M*M) for x in range(M)] for _ in range(M)]
-        print(kernel)
+
+        # Tamaño de la imagen
+        rows = len(new_imagen)
+        cols = len(new_imagen[0])
+
         off_set = len(kernel) // 2
-        
 
+        # Crear una copia de la imagen para almacenar el resultado
+        blurred_image = new_imagen.copy()
 
-        
+        # Aplicar convolución para difuminar la imagen
+        for i in range(off_set, rows - off_set):
+            for j in range(off_set, cols - off_set):
+                red = 0
+                green = 0
+                blue = 0
+                for m in range(len(kernel)):
+                    for n in range(len(kernel[0])):
+                        red += new_imagen[i - off_set + m][j - off_set + n][0] * kernel[m][n]
+                        green += new_imagen[i - off_set + m][j - off_set + n][1] * kernel[m][n]
+                        blue += new_imagen[i - off_set + m][j - off_set + n][2] * kernel[m][n]
 
-        return new_imagen
+                blurred_image[i][j] = [red, green, blue]
+        return blurred_image
 
 
 
@@ -111,7 +128,7 @@ class Solution:
 solucion = Solution()
 imagen_original = leer_imagen('ruta.bmp')
 nueva_imagen = solucion.pregunta_1(imagen_original, 250, (309,340))
-# nueva_imagen2 = solucion.pregunta_2(imagen_original,3)
+nueva_imagen2 = solucion.pregunta_2(imagen_original,5)
 guardar_imagen('jojo-circle.bmp', nueva_imagen)
-# guardar_imagen('jojo-difu.bmp', nueva_image2)
+guardar_imagen('jojo-difu.bmp', nueva_imagen2)
 
