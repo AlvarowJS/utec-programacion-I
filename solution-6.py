@@ -41,28 +41,57 @@ class Solution:
 
     def pregunta_1(self, imagen, radius, center): 
         new_imagen = imagen.copy()
+        # con FOR
         c0 = center[0]
         c1 = center[1]
-        r = radius    
-      
-        matriz = np.array(new_imagen)
-        y = matriz.shape[0]
-        x = matriz.shape[1]
+        r = radius
+        cols = len(new_imagen)
+        rows = len(new_imagen[0])        
+        newArray = []
+        
+        for i in range(rows):
+            iarray = []
+            for j in range(cols):
+                red = 0
+                green = 0
+                blue = 0
+                distance_squared = (j - c0)**2 + (i - c1)**2
+
+                if distance_squared > r**2:
+                    iarray.append([red, green, blue])
+                else:
+                    iarray.append([new_imagen[i][j][0], new_imagen[i][j][1], new_imagen[i][j][2]])
+
+            newArray.append(iarray)
+        
+        new_imagen = newArray
+            
 
 
-        i, j = np.ogrid[0:y, 0:x]
+        # Con np
+        # c0 = center[0]
+        # c1 = center[1]
+        # r = radius       
+        # matriz = np.array(new_imagen)
+        # y = matriz.shape[0]
+        # x = matriz.shape[1]
+        
+
+        # i, j = np.ogrid[0:y, 0:x]
        
 
-        result = (j - c0)**2 + (i - c1)**2 > r**2
-        matriz[result,:]=0
-        new_imagen = matriz
+        # result = (j - c0)**2 + (i - c1)**2 > r**2
+        # matriz[result,:]=0
+        # new_imagen = matriz
         return new_imagen 
 
     
     def pregunta_2(self, imagen, M):
-        new_imagen = imagen.copy()
+        new_imagen = imagen.copy()                
         kernel = [[1/(M*M) for x in range(M)] for _ in range(M)]
+        print(kernel)
         off_set = len(kernel) // 2
+        
 
 
         
@@ -82,5 +111,7 @@ class Solution:
 solucion = Solution()
 imagen_original = leer_imagen('ruta.bmp')
 nueva_imagen = solucion.pregunta_1(imagen_original, 250, (309,340))
+# nueva_imagen2 = solucion.pregunta_2(imagen_original,3)
 guardar_imagen('jojo-circle.bmp', nueva_imagen)
+# guardar_imagen('jojo-difu.bmp', nueva_image2)
 
